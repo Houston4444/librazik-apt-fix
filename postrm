@@ -1,0 +1,35 @@
+#!/bin/bash
+
+release=buster
+apt_dir=/etc/apt
+
+case "$1" in
+    configure)
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+        exit 0
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+# Décommenter dans sources.list les lignes de dépôt
+# que nous venons d'enlever de sources.list.d/
+
+# uncomment repository lines in sources.list
+# that we just remove from sources.list.d/
+sed -i -e "/^#deb http:\/\/deb.debian.org\/debian\/ $release /s|^#||" \
+       -e "/^#deb-src http:\/\/deb.debian.org\/debian\/ $release /s|^#||" \
+       -e "/^#deb http:\/\/security.debian.org\/debian-security $release\/updates /s|^#||" \
+       -e "/^#deb-src http:\/\/security.debian.org\/debian-security $release\/updates /s|^#||" \
+       -e "/^#deb http:\/\/deb.debian.org\/debian\/ $release-updates /s|^#||" \
+       -e "/^#deb-src http:\/\/deb.debian.org\/debian\/ $release-updates /s|^#||" \
+       -e "/^#deb http:\/\/deb.debian.org\/debian $release-backports /s|^#||" \
+       -e "/^#deb-src http:\/\/deb.debian.org\/debian $release-backports /s|^#||" \
+       "$apt_dir/sources.list"  
+
+exit 0
