@@ -4,13 +4,8 @@ release=buster
 apt_dir=/etc/apt
 
 case "$1" in
-    configure)
+    purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
     ;;
-
-    abort-upgrade|abort-remove|abort-deconfigure)
-        exit 0
-    ;;
-
     *)
         echo "postinst called with unknown argument \`$1'" >&2
         exit 1
